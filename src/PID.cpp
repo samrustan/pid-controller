@@ -31,6 +31,7 @@ double PID::TotalError() {
   return 0;
 }
 
+/*
 double twiddle(double tol=0.2) {
 
     double p[] = {0, 0, 0};
@@ -60,3 +61,4 @@ double twiddle(double tol=0.2) {
                     dp[i] *= 0.9
         it += 1
     return p
+*/
