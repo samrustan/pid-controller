@@ -1,7 +1,27 @@
-# CarND-Controls-PID
-Self-Driving Car Engineer Nanodegree Program
-
+# PID Controller Project
 ---
+
+## Introduction
+
+The goal of this project is to build a lane centering feature for a simulated car using PID controller. Lane centering is based on a cross-track error.  The cross track error is minimized by using PID controller.
+
+## PID Components
+
+P is the proportional term that is directly proportional to the cross track error. The cross track error is the distance from the center of the lane to the center of the car. The proportional gain (Kp) is multiplied with the CTE which means we will steer proportional to the CTE based on the value of the proportional gain.  The proportional component has the most direct effect on the position, however using only the proportional component will cause oscillations by overshooting the target error.
+
+D is the differential term that is the difference between the current and previous values of the error. The differential term is used to minimize the rate of change of the cross track errors over time. In affect, this helps to more smoothly reach the center line.  This is important because the P component acts directly on the CTE and will cause the car to oscillate by overshooting the target error.
+
+I is the integral term that is the accumulated sum of the error. The I component is used on the steering drift.  The integral component is used to hold the total error closer to zero or the center line in the case of driving a car.
+
+### Tuning PID Components
+
+The PID components were tuned  manually. I started with a PD controller only. First I primary goal was to tune the P only component to get the car to move in a straight line. Kp reduced to 0.1 from a starting value of 1.0. Kp of 0.1 was good enough for straight paths but was failing on curves. 
+
+Kd was then tuned for The D component in the same manner as the P component. My final good-enough D value was 3.1 from a starting value of 1.0. At this point the car was driving well enough with just the PD controller, however it wasn't converging properly on curves and turns. 
+
+For Ki, I stared with 1.0 as initial guess but this was far too much and the car became highly unstable. I reduced it by an order of magnitude and eventually found that a good-enough result was about 0.0002. 
+
+At this point with a Kp, Ki, Kd value of 0.1, 0.0002, 3.1 respectively, the car drove fairly smoothly throughout the track but the car seems late into the curves and is a bit erratic at times.  Further filtering of the CTE might help to address this, as well as, the ability to see further down the track --like having map data or longer range sensor data.
 
 ## Dependencies
 
@@ -35,58 +55,3 @@ There's an experimental patch for windows in this [PR](https://github.com/udacit
 3. Compile: `cmake .. && make`
 4. Run it: `./pid`. 
 
-## Editor Settings
-
-We've purposefully kept editor configuration files out of this repo in order to
-keep it as simple and environment agnostic as possible. However, we recommend
-using the following settings:
-
-* indent using spaces
-* set tab width to 2 spaces (keeps the matrices in source code aligned)
-
-## Code Style
-
-Please (do your best to) stick to [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html).
-
-## Project Instructions and Rubric
-
-Note: regardless of the changes you make, your project must be buildable using
-cmake and make!
-
-More information is only accessible by people who are already enrolled in Term 2
-of CarND. If you are enrolled, see [the project page](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/f1820894-8322-4bb3-81aa-b26b3c6dcbaf/lessons/e8235395-22dd-4b87-88e0-d108c5e5bbf4/concepts/6a4d8d42-6a04-4aa6-b284-1697c0fd6562)
-for instructions and the project rubric.
-
-## Hints!
-
-* You don't have to follow this directory structure, but if you do, your work
-  will span all of the .cpp files here. Keep an eye out for TODOs.
-
-## Call for IDE Profiles Pull Requests
-
-Help your fellow students!
-
-We decided to create Makefiles with cmake to keep this project as platform
-agnostic as possible. Similarly, we omitted IDE profiles in order to we ensure
-that students don't feel pressured to use one IDE or another.
-
-However! I'd love to help people get up and running with their IDEs of choice.
-If you've created a profile for an IDE that you think other students would
-appreciate, we'd love to have you add the requisite profile files and
-instructions to ide_profiles/. For example if you wanted to add a VS Code
-profile, you'd add:
-
-* /ide_profiles/vscode/.vscode
-* /ide_profiles/vscode/README.md
-
-The README should explain what the profile does, how to take advantage of it,
-and how to install it.
-
-Frankly, I've never been involved in a project with multiple IDE profiles
-before. I believe the best way to handle this would be to keep them out of the
-repo root to avoid clutter. My expectation is that most profiles will include
-instructions to copy files to a new location to get picked up by the IDE, but
-that's just a guess.
-
-One last note here: regardless of the IDE used, every submitted project must
-still be compilable with cmake and make./
